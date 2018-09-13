@@ -8,7 +8,7 @@ A docker-machine replacement that take advantage of SSH socket forwarding.
 docker run -d --restart=always -p 2377:22 \
   -v /var/run/docker.sock:/var/run/docker.sock:ro \
   -v ~/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro \
-  --name docker-socket-tunnel docker-socket-tunnel
+  --name docker-socket-tunnel teambun/docker-socket-tunnel
 ```
 
 2. Forward Docker socket
