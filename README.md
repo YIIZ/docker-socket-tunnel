@@ -1,5 +1,5 @@
 # Docker Socket Tunnel
-A docker-machine replacement that take advantage of SSH socket forwarding.
+A simple docker-machine replacement that take advantage of SSH socket forwarding.
 
 
 ## Usage (by manual)
