@@ -1,0 +1,12 @@
+#!/bin/sh
+# Install docker-socket-tunnel
+# Usage:
+#   dockertunnel-init user@remote
+
+# TODO install docker if not exists?
+
+# add docker-socket-tunnel
+ssh $@ "docker run -d --restart=always -p 2377:22 \
+  -v /var/run/docker.sock:/var/run/docker.sock:ro \
+  -v ~/.ssh/authorized_keys:/root/.ssh/authorized_keys:ro \
+  --name docker-socket-tunnel teambun/docker-socket-tunnel"

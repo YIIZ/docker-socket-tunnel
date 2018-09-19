@@ -2,7 +2,7 @@
 A docker-machine replacement that take advantage of SSH socket forwarding.
 
 
-## Usage
+## Usage (by manual)
 1. Deploy this on remote machine
 ```bash
 docker run -d --restart=always -p 2377:22 \
@@ -23,3 +23,9 @@ export DOCKER_HOST=unix:///tmp/docker.sock
 
 docker ps
 ```
+
+
+## Usage (by scripts)
+1. Get [scripts](./scripts)
+2. Deploy this to remote machine: `dockertunnel-init user@remote`
+3. Run docker client: `dockertunnel user@remote docker ps`

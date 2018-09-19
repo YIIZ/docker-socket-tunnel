@@ -1,0 +1,27 @@
+#!/bin/sh
+# Usage:
+#   dockertunnel user@remote docker ps
+
+# extract machine
+TARGET=${1}
+
+# extract command
+shift
+set -- "$@"
+COMMAND=$*
+
+# setup target machine
+unset DOCKER_TLS_VERIFY
+export DOCKER_HOST="unix:///tmp/docker.sock"
+
+
+# temporary socket tunnel
+# https://stackoverflow.com/a/15198031/1793548
+ssh -M -S /tmp/docker-socket-ctrl -fnNT -L /tmp/docker.sock:/var/run/docker.sock -p 2377 "${TARGET}"
+
+# run it
+eval $COMMAND
+
+# clean socket
+ssh -S /tmp/docker-socket-ctrl -O exit "${TARGET}"
+rm /tmp/docker.sock
