@@ -10,18 +10,22 @@ shift
 set -- "$@"
 COMMAND=$*
 
+TMPID=$(uuidgen)
+SOCK_FILE="/tmp/dockertunnel.${TMPID}.sock"
+CTRL_FILE="/tmp/dockertunnel.${TMPID}.ctrl"
+
 # setup target machine
 unset DOCKER_TLS_VERIFY
-export DOCKER_HOST="unix:///tmp/docker.sock"
+export DOCKER_HOST="unix://${SOCK_FILE}"
 
 
 # temporary socket tunnel
 # https://stackoverflow.com/a/15198031/1793548
-ssh -M -S /tmp/docker-socket-ctrl -fnNT -L /tmp/docker.sock:/var/run/docker.sock -p 2377 "${TARGET}"
+ssh -M -S "${CTRL_FILE}" -fnNT -L "${SOCK_FILE}:/var/run/docker.sock" -p 2377 "${TARGET}"
 
 # run it
 eval $COMMAND
 
 # clean socket
-ssh -S /tmp/docker-socket-ctrl -O exit "${TARGET}"
-rm /tmp/docker.sock
+ssh -S "${CTRL_FILE}" -O exit "${TARGET}"
+rm "${SOCK_FILE}"
